@@ -1,45 +1,59 @@
-const EMAIL = "lokheshreddy.m@gmail.com";
+const EMAIL = "lokheshreddy@gmail.com";
 
-// Lokesh's repositories mapped with detailed stats & visual styles for the spotlight lab
+// Lokesh's projects mapped with detailed descriptions from the resume
 const projects = [
   {
     name: "JusticeGPT",
-    label: "Legal AI Advisor",
+    label: "Legal AI Chatbot",
     categories: ["ai-ml"],
-    language: "JavaScript",
+    language: "React / Node",
     status: "Active Build",
     focus: "Legal Reasoning",
     url: "https://github.com/lokheshreddy-gif/JusticeGPT",
-    description: "An AI-powered legal assistant designed to help citizens understand legal concepts and navigate local laws through guided conversational workflows.",
+    description: "Built an AI legal chatbot using React, Node.js and MongoDB. Added voice input, REST API integration and secure chat history.",
     icon: "fa-scale-balanced",
     visualClass: "visual-justice",
-    tech: ["JavaScript", "LLMs", "Legal Tech", "Prompt Engineering"]
+    tech: ["React", "Node.js", "MongoDB", "Voice Input", "REST APIs"]
   },
   {
     name: "Mindful Companion",
-    label: "Mental Health Support",
+    label: "Mental Health Platform",
     categories: ["ai-ml"],
-    language: "TypeScript",
+    language: "React / Flask",
     status: "Deployed",
     focus: "Intelligent Chat",
     url: "https://github.com/lokheshreddy-gif/Mindful-Companion",
-    description: "An AI emotional assistant providing personalized mental health support, anxiety guidance, and mindfulness logs through secure dialogues.",
+    live: "https://mindchat-zpnk.vercel.app",
+    description: "Developed a full-stack mental health platform using React, Flask and Python. Integrated facial emotion recognition, AI conversations and REST APIs. Implemented mood tracking, journaling and crisis detection. Designed hybrid cloud and local AI architecture.",
     icon: "fa-heart-pulse",
     visualClass: "visual-mindful",
-    tech: ["TypeScript", "AI Agents", "Mental Health", "Vector Database"]
+    tech: ["React", "Flask", "Python", "Emotion Recognition", "APIs", "Mood Tracking"]
   },
   {
     name: "Academic Abstract Classifier",
-    label: "NLP Paper Classifier",
+    label: "NLP Sorter",
     categories: ["ai-ml"],
     language: "Python",
     status: "ML Active",
-    focus: "NLP Domain Sorter",
+    focus: "Text Classifier",
     url: "https://github.com/lokheshreddy-gif/Academic-Abstract-Classifier-",
-    description: "Natural Language Processing (NLP) classifier that parses academic abstract texts and automatically labels them into major scientific fields.",
+    description: "Developed a multi-class NLP classifier using TF-IDF, Logistic Regression, SVM and Naive Bayes. Improved accuracy through preprocessing, cross-validation and hyperparameter tuning.",
     icon: "fa-book-open-reader",
     visualClass: "visual-classifier",
-    tech: ["Python", "Scikit-Learn", "NLP", "Text Sorter"]
+    tech: ["Python", "TF-IDF", "Logistic Regression", "SVM", "Naive Bayes", "Scikit-learn"]
+  },
+  {
+    name: "Batch Process Monitor",
+    label: "OS Simulation Portal",
+    categories: ["systems"],
+    language: "C++",
+    status: "Sim Build",
+    focus: "CPU Scheduling",
+    url: "https://github.com/lokheshreddy-gif/Batch-Process-Monitor",
+    description: "Implemented FCFS and Round Robin CPU scheduling. Used Process Control Blocks with fork(), execvp(), kill(), waitpid() and signals. Simulated timer-based preemptive scheduling and IPC.",
+    icon: "fa-microchip",
+    visualClass: "visual-monitor",
+    tech: ["C++", "CPU Scheduling", "fork() / execvp()", "Signals", "IPC", "Preemptive Scheduling"]
   },
   {
     name: "Bias & Fairness in Educational AI",
@@ -53,19 +67,6 @@ const projects = [
     icon: "fa-yin-yang",
     visualClass: "visual-bias",
     tech: ["Python", "Fairness Metrics", "Responsible AI", "Analytics"]
-  },
-  {
-    name: "Batch Process Monitor",
-    label: "OS Scheduler simulation",
-    categories: ["systems"],
-    language: "C++",
-    status: "Sim Build",
-    focus: "CPU Scheduling",
-    url: "https://github.com/lokheshreddy-gif/Batch-Process-Monitor",
-    description: "An operating systems pipeline simulating First Come First Serve (FCFS) and Round Robin queue cycles with dynamic performance stats.",
-    icon: "fa-microchip",
-    visualClass: "visual-monitor",
-    tech: ["C++", "Process Scheduling", "OS Concepts", "Simulations"]
   },
   {
     name: "Expense Tracker Dev Guide",
@@ -169,6 +170,7 @@ function projectMatchesFilter(project) {
 function projectActions(project) {
   return `
     <div class="project-actions">
+      ${project.live ? `<a class="text-link" href="${project.live}" target="_blank" rel="noopener">Live Demo <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>` : ""}
       <a class="text-link" href="${project.url}" target="_blank" rel="noopener">Code View <i class="fa-brands fa-github" aria-hidden="true"></i></a>
     </div>
   `;
