@@ -1,279 +1,447 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // ==========================================================================
-    // TYPEWRITER EFFECT
-    // ==========================================================================
-    const typewriterElement = document.getElementById('typewriter');
-    const words = [
-        "Intelligent AI Solutions",
-        "Scalable Web Systems",
-        "Responsible ML Models",
-        "Clean & Performant Code"
-    ];
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typingSpeed = 100;
+const EMAIL = "lokheshreddy.m@gmail.com";
 
-    function type() {
-        const currentWord = words[wordIndex];
-        
-        if (isDeleting) {
-            typewriterElement.textContent = currentWord.substring(0, charIndex - 1);
-            charIndex--;
-            typingSpeed = 50; // Deleting is faster
-        } else {
-            typewriterElement.textContent = currentWord.substring(0, charIndex + 1);
-            charIndex++;
-            typingSpeed = 100;
-        }
+// Lokesh's repositories mapped with detailed stats & visual styles for the spotlight lab
+const projects = [
+  {
+    name: "JusticeGPT",
+    label: "Legal AI Advisor",
+    categories: ["ai-ml"],
+    language: "JavaScript",
+    status: "Active Build",
+    focus: "Legal Reasoning",
+    url: "https://github.com/lokheshreddy-gif/JusticeGPT",
+    description: "An AI-powered legal assistant designed to help citizens understand legal concepts and navigate local laws through guided conversational workflows.",
+    icon: "fa-scale-balanced",
+    visualClass: "visual-justice",
+    tech: ["JavaScript", "LLMs", "Legal Tech", "Prompt Engineering"]
+  },
+  {
+    name: "Mindful Companion",
+    label: "Mental Health Support",
+    categories: ["ai-ml"],
+    language: "TypeScript",
+    status: "Deployed",
+    focus: "Intelligent Chat",
+    url: "https://github.com/lokheshreddy-gif/Mindful-Companion",
+    description: "An AI emotional assistant providing personalized mental health support, anxiety guidance, and mindfulness logs through secure dialogues.",
+    icon: "fa-heart-pulse",
+    visualClass: "visual-mindful",
+    tech: ["TypeScript", "AI Agents", "Mental Health", "Vector Database"]
+  },
+  {
+    name: "Academic Abstract Classifier",
+    label: "NLP Paper Classifier",
+    categories: ["ai-ml"],
+    language: "Python",
+    status: "ML Active",
+    focus: "NLP Domain Sorter",
+    url: "https://github.com/lokheshreddy-gif/Academic-Abstract-Classifier-",
+    description: "Natural Language Processing (NLP) classifier that parses academic abstract texts and automatically labels them into major scientific fields.",
+    icon: "fa-book-open-reader",
+    visualClass: "visual-classifier",
+    tech: ["Python", "Scikit-Learn", "NLP", "Text Sorter"]
+  },
+  {
+    name: "Bias & Fairness in Educational AI",
+    label: "Responsible AI Audit",
+    categories: ["ai-ml"],
+    language: "Python",
+    status: "Research Draft",
+    focus: "Algorithmic Equity",
+    url: "https://github.com/lokheshreddy-gif/Bias-and-Fairness-in-Educational-AI",
+    description: "A Responsible AI audit project checking representation bias and statistical fairness metrics inside grading algorithms used in schools.",
+    icon: "fa-yin-yang",
+    visualClass: "visual-bias",
+    tech: ["Python", "Fairness Metrics", "Responsible AI", "Analytics"]
+  },
+  {
+    name: "Batch Process Monitor",
+    label: "OS Scheduler simulation",
+    categories: ["systems"],
+    language: "C++",
+    status: "Sim Build",
+    focus: "CPU Scheduling",
+    url: "https://github.com/lokheshreddy-gif/Batch-Process-Monitor",
+    description: "An operating systems pipeline simulating First Come First Serve (FCFS) and Round Robin queue cycles with dynamic performance stats.",
+    icon: "fa-microchip",
+    visualClass: "visual-monitor",
+    tech: ["C++", "Process Scheduling", "OS Concepts", "Simulations"]
+  },
+  {
+    name: "Expense Tracker Dev Guide",
+    label: "Full Stack Tutorial",
+    categories: ["web-dev"],
+    language: "PHP",
+    status: "Completed",
+    focus: "Backend Structure",
+    url: "https://github.com/lokheshreddy-gif/Expense-Tracker-Development-Guide",
+    description: "A comprehensive developer guide showing how to set up routing, databases, user auth, and financial charting using PHP.",
+    icon: "fa-wallet",
+    visualClass: "visual-expense",
+    tech: ["PHP", "SQL Database", "Routing", "Auth Systems"]
+  }
+];
 
-        if (!isDeleting && charIndex === currentWord.length) {
-            isDeleting = true;
-            typingSpeed = 2000; // Pause at the end of word
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            wordIndex = (wordIndex + 1) % words.length;
-            typingSpeed = 500; // Pause before typing next word
-        }
+let activeProjectIndex = 0;
+let activeFilter = "all";
 
-        setTimeout(type, typingSpeed);
-    }
+// Loading Page Overlay
+function setLoadingState() {
+  const overlay = document.getElementById("loading-overlay");
+  if (!overlay) return;
+  window.setTimeout(() => overlay.classList.add("hide"), 350);
+}
 
-    if (typewriterElement) {
-        setTimeout(type, 1000);
-    }
+// Navigation & Sticky Headers
+function setupNavigation() {
+  const toggle = document.getElementById("hamburger");
+  const navLinks = document.getElementById("nav-links");
+  const header = document.getElementById("header");
+  const backToTopBtn = document.getElementById("back-to-top");
+  if (!toggle || !navLinks) return;
 
-    // ==========================================================================
-    // THEME SWITCHER (DARK/LIGHT MODE)
-    // ==========================================================================
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const body = document.body;
+  const closeMenu = () => {
+    navLinks.classList.remove("active");
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("menu-open");
+  };
 
-    // Check persistent storage or user preference
-    const savedTheme = localStorage.getItem('portfolio-theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  toggle.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("active");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    document.body.classList.toggle("menu-open", isOpen);
+  });
 
-    if (savedTheme) {
-        body.className = savedTheme;
-    } else {
-        body.className = systemPrefersDark ? 'dark-theme' : 'light-theme';
-    }
+  navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
 
-    themeToggleBtn.addEventListener('click', () => {
-        // Temporarily add a transition helper class to body to smoothly fade colors
-        body.classList.add('theme-transitioning');
-        
-        if (body.classList.contains('dark-theme')) {
-            body.classList.replace('dark-theme', 'light-theme');
-            localStorage.setItem('portfolio-theme', 'light-theme');
-        } else {
-            body.classList.replace('light-theme', 'dark-theme');
-            localStorage.setItem('portfolio-theme', 'dark-theme');
-        }
-
-        // Remove the transition helper class after the transition is complete
-        setTimeout(() => {
-            body.classList.remove('theme-transitioning');
-        }, 400);
-    });
-
-    // ==========================================================================
-    // MOBILE MENU TOGGLE
-    // ==========================================================================
-    const menuToggle = document.getElementById('menu-toggle');
-    const navMenu = document.getElementById('nav-menu');
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('open');
-            navMenu.classList.toggle('open');
-        });
-
-        // Close menu when clicking a link
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggle.classList.remove('open');
-                navMenu.classList.remove('open');
-            });
-        });
-    }
-
-    // ==========================================================================
-    // SCROLL ACTIONS (HEADER SCROLL, BACK-TO-TOP, ACTIVE NAV LINKS)
-    // ==========================================================================
-    const header = document.getElementById('header');
-    const backToTopBtn = document.getElementById('back-to-top');
-    const sections = document.querySelectorAll('section');
-
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-
-        // Header resize and blur on scroll
-        if (scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-
-        // Show/hide Back-to-Top Button
-        if (scrollY > 400) {
-            backToTopBtn.classList.add('show');
-        } else {
-            backToTopBtn.classList.remove('show');
-        }
-
-        // Update active nav link based on section position
-        sections.forEach(current => {
-            const sectionHeight = current.offsetHeight;
-            const sectionTop = current.offsetTop - 120; // offset for fixed header
-            const sectionId = current.getAttribute('id');
-            const correspondingLink = document.querySelector(`.nav-link[href*=${sectionId}]`);
-
-            if (correspondingLink) {
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    correspondingLink.classList.add('active');
-                }
-            }
-        });
-    });
-
-    // Back to top click action
-    if (backToTopBtn) {
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-
-    // ==========================================================================
-    // PROJECTS FILTER
-    // ==========================================================================
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
-
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove active class from all filter buttons
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
-            button.classList.add('active');
-
-            const filterValue = button.getAttribute('data-filter');
-
-            projectCards.forEach(card => {
-                const cardCategory = card.getAttribute('data-category');
-
-                // Animate out card
-                card.style.opacity = '0';
-                card.style.transform = 'scale(0.85)';
-                card.style.pointerEvents = 'none';
-
-                setTimeout(() => {
-                    if (filterValue === 'all' || cardCategory === filterValue) {
-                        card.style.display = 'flex';
-                        // Trigger reflow/animation in
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'scale(1)';
-                            card.style.pointerEvents = 'auto';
-                        }, 50);
-                    } else {
-                        card.style.display = 'none';
-                    }
-                }, 300);
-            });
-        });
-    });
-
-    // ==========================================================================
-    // INTERSECTION OBSERVER FOR SCROLL REVEAL
-    // ==========================================================================
-    const revealElements = document.querySelectorAll('.scroll-reveal');
+  // Track scroll position
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
     
-    if ('IntersectionObserver' in window) {
-        const revealCallback = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Reveal only once
-                }
-            });
-        };
-
-        const revealObserver = new IntersectionObserver(revealCallback, {
-            root: null,
-            threshold: 0.15,
-            rootMargin: '0px 0px -50px 0px'
-        });
-
-        revealElements.forEach(element => {
-            revealObserver.observe(element);
-        });
+    // Header resize
+    if (scrollY > 50) {
+      header.style.minHeight = "70px";
+      header.style.boxShadow = "var(--shadow)";
     } else {
-        // Fallback for browsers that don't support IntersectionObserver
-        revealElements.forEach(element => {
-            element.classList.add('active');
-        });
+      header.style.minHeight = "var(--header-height)";
+      header.style.boxShadow = "none";
     }
 
-    // ==========================================================================
-    // CONTACT FORM INTERACTIVE SUBMISSION
-    // ==========================================================================
-    const contactForm = document.getElementById('contact-form');
-    const formFeedback = document.getElementById('form-feedback');
-    const formSubmitBtn = document.getElementById('form-submit');
-
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // Disable submit button and show loading text
-            formSubmitBtn.disabled = true;
-            const originalBtnText = formSubmitBtn.innerHTML;
-            formSubmitBtn.innerHTML = `<span>Sending...</span> <svg class="spinning" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>`;
-
-            // Simulate form submission to backend/service
-            setTimeout(() => {
-                // Success styling
-                formFeedback.className = 'form-feedback success';
-                formFeedback.textContent = 'Thank you! Your message has been sent successfully.';
-                
-                // Clear fields
-                contactForm.reset();
-
-                // Restore button
-                formSubmitBtn.disabled = false;
-                formSubmitBtn.innerHTML = originalBtnText;
-
-                // Hide feedback after 5 seconds
-                setTimeout(() => {
-                    formFeedback.style.display = 'none';
-                    formFeedback.className = 'form-feedback';
-                }, 5000);
-
-            }, 1500);
-        });
+    // Back to top show/hide
+    if (scrollY > 400) {
+      backToTopBtn.classList.add("show");
+    } else {
+      backToTopBtn.classList.remove("show");
     }
+  });
+
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  // Active section highlights
+  const sections = [...document.querySelectorAll("main section[id]")];
+  const sectionMap = new Map(sections.map((section) => [section.id, section]));
+  const navAnchors = [...navLinks.querySelectorAll('a[href^="#"]')];
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      navAnchors.forEach((anchor) => anchor.classList.remove("active"));
+      const active = navAnchors.find((anchor) => sectionMap.get(anchor.getAttribute("href").slice(1)) === entry.target);
+      if (active) active.classList.add("active");
+    });
+  }, { rootMargin: "-30% 0px -55% 0px", threshold: 0.1 });
+
+  sections.forEach((section) => observer.observe(section));
+}
+
+// Check filter match
+function projectMatchesFilter(project) {
+  return activeFilter === "all" || project.categories.includes(activeFilter);
+}
+
+// Action button rendering
+function projectActions(project) {
+  return `
+    <div class="project-actions">
+      <a class="text-link" href="${project.url}" target="_blank" rel="noopener">Code View <i class="fa-brands fa-github" aria-hidden="true"></i></a>
+    </div>
+  `;
+}
+
+// Render Spotlight Section
+function renderSpotlight() {
+  const spotlight = document.getElementById("project-spotlight");
+  if (!spotlight) return;
+
+  const project = projects[activeProjectIndex];
+  spotlight.innerHTML = `
+    <div class="spotlight-visual ${project.visualClass}">
+      <div class="spotlight-screen">
+        <div class="screen-toolbar">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="screen-line wide"></div>
+        <div class="screen-line"></div>
+        <div class="screen-line short"></div>
+        <div class="screen-pulse">
+          <i class="fa-solid ${project.icon}" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+    <div class="spotlight-copy">
+      <span class="lab-kicker">Spotlight build</span>
+      <h3>${project.name}</h3>
+      <p>${project.description}</p>
+      <div class="spotlight-stats" aria-label="${project.name} metadata">
+        <span>${project.status}</span>
+        <span>${project.language}</span>
+        <span>${project.focus}</span>
+      </div>
+      <div class="project-meta">
+        ${project.tech.map((tech) => `<span class="tech-tag">${tech}</span>`).join("")}
+      </div>
+      ${projectActions(project)}
+    </div>
+  `;
+}
+
+// Render Grid Showcase Cards
+function renderProjects() {
+  const showcase = document.querySelector(".project-showcase");
+  if (!showcase) return;
+
+  const visibleProjects = projects
+    .map((project, index) => ({ project, index }))
+    .filter(({ project }) => projectMatchesFilter(project));
+
+  // Auto-focus first visible project if current active goes out of view
+  if (!visibleProjects.some(({ index }) => index === activeProjectIndex)) {
+    activeProjectIndex = visibleProjects[0]?.index ?? 0;
+  }
+
+  renderSpotlight();
+
+  showcase.innerHTML = visibleProjects.map(({ project, index }) => `
+    <article class="project-card reveal ${index === activeProjectIndex ? "is-active" : ""}" data-category="${project.categories.join(" ")}">
+      <button class="project-select" type="button" data-project-index="${index}" aria-pressed="${index === activeProjectIndex}" aria-label="Spotlight ${project.name}">
+        <div class="project-visual ${project.visualClass}" data-label="${project.label}">
+          <div class="project-icon">
+            <i class="fa-solid ${project.icon}" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="project-body">
+          <span class="project-status">${project.status}</span>
+          <h3>${project.name}</h3>
+          <p>${project.description}</p>
+          <div class="project-meta">
+            ${project.tech.slice(0, 3).map((tech) => `<span class="tech-tag">${tech}</span>`).join("")}
+          </div>
+        </div>
+      </button>
+      ${projectActions(project)}
+    </article>
+  `).join("");
+}
+
+// 3D Tilt pointermove math
+function setupProjectMotion() {
+  const cards = document.querySelectorAll(".project-card");
+  if (!cards.length || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  cards.forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      card.style.setProperty("--rx", `${(-y * 8).toFixed(2)}deg`);
+      card.style.setProperty("--ry", `${(x * 8).toFixed(2)}deg`);
+    });
+
+    card.addEventListener("pointerleave", () => {
+      card.style.removeProperty("--rx");
+      card.style.removeProperty("--ry");
+    });
+  });
+}
+
+// Project filter setup
+function setupProjectLab() {
+  const filters = document.querySelectorAll(".filter-btn");
+  const showcase = document.querySelector(".project-showcase");
+  if (!showcase) return;
+
+  filters.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeFilter = button.dataset.filter || "all";
+      filters.forEach((filter) => {
+        const isActive = filter === button;
+        filter.classList.toggle("active", isActive);
+        filter.setAttribute("aria-pressed", String(isActive));
+      });
+      renderProjects();
+      setupProjectMotion();
+      setupRevealAnimations();
+    });
+  });
+
+  showcase.addEventListener("click", (event) => {
+    const selector = event.target.closest("[data-project-index]");
+    if (!selector) return;
+    activeProjectIndex = Number(selector.dataset.projectIndex);
+    renderProjects();
+    setupProjectMotion();
+    setupRevealAnimations();
+  });
+
+  renderProjects();
+}
+
+// Section Scroll Reveal Transitions
+function setupRevealAnimations() {
+  const revealEls = document.querySelectorAll(".reveal");
+  if (!revealEls.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  revealEls.forEach((element) => observer.observe(element));
+}
+
+// Stats Count-Up Animations
+function setupCounters() {
+  const counters = document.querySelectorAll("[data-count]");
+  if (!counters.length) return;
+
+  const animateCounter = (element) => {
+    const target = Number(element.dataset.count);
+    const duration = 1000;
+    const start = performance.now();
+
+    const update = (time) => {
+      const progress = Math.min((time - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
+      element.textContent = Math.round(target * eased);
+      if (progress < 1) requestAnimationFrame(update);
+    };
+
+    requestAnimationFrame(update);
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        animateCounter(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  counters.forEach((counter) => observer.observe(counter));
+}
+
+// Copy email helper
+function setupCopyEmail() {
+  const button = document.getElementById("copy-email");
+  if (!button) return;
+
+  button.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      button.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i> Copied';
+      window.setTimeout(() => {
+        button.innerHTML = '<i class="fa-regular fa-copy" aria-hidden="true"></i> Copy email';
+      }, 1600);
+    } catch {
+      window.location.href = `mailto:${EMAIL}`;
+    }
+  });
+}
+
+// Contact form simulated submission
+function setupContactForm() {
+  const form = document.getElementById("contact-form");
+  const status = document.getElementById("form-status");
+  if (!form || !status) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    status.textContent = "Sending...";
+    status.style.color = "var(--teal)";
+
+    setTimeout(() => {
+      status.textContent = "Thank you! Your message has been sent successfully.";
+      status.style.color = "var(--emerald)";
+      form.reset();
+      
+      setTimeout(() => {
+        status.textContent = "";
+      }, 5000);
+    }, 1500);
+  });
+}
+
+// Theme toggler with local persistence
+function setupThemeToggle() {
+  const toggleBtn = document.getElementById("theme-toggle");
+  const body = document.body;
+
+  const savedTheme = localStorage.getItem("portfolio-theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  if (savedTheme) {
+    body.className = savedTheme;
+  } else {
+    body.className = prefersDark ? "dark-theme" : "light-theme";
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    body.classList.add("theme-transition");
+    if (body.classList.contains("dark-theme")) {
+      body.classList.replace("dark-theme", "light-theme");
+      localStorage.setItem("portfolio-theme", "light-theme");
+    } else {
+      body.classList.replace("light-theme", "dark-theme");
+      localStorage.setItem("portfolio-theme", "dark-theme");
+    }
+    setTimeout(() => body.classList.remove("theme-transition"), 400);
+  });
+}
+
+// Initialize all features on load
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("current-year").textContent = String(new Date().getFullYear());
+  
+  setupThemeToggle();
+  setupNavigation();
+  setupProjectLab();
+  setupProjectMotion();
+  setupRevealAnimations();
+  setupCounters();
+  setupCopyEmail();
+  setupContactForm();
+  setLoadingState();
 });
 
-// CSS transition styling for the theme switch
+// Inline helper stylesheet for theme swap transitions
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
-.theme-transitioning,
-.theme-transitioning *,
-.theme-transitioning *::before,
-.theme-transitioning *::after {
-    transition: background-color 0.4s ease !important;
-}
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-.spinning {
-    animation: spin 1s linear infinite;
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease !important;
 }
 `;
 document.head.appendChild(styleSheet);
