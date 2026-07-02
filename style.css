@@ -586,42 +586,51 @@ button, input, textarea {
     align-items: center;
 }
 
-.hero-image {
+.hero-image-container {
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    width: 48%;
+    height: 100%;
     z-index: -2;
+    overflow: hidden;
+    pointer-events: none;
+    mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 15%, rgba(0,0,0,0) 78%);
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 15%, rgba(0,0,0,0) 78%);
+}
+
+.hero-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 65% 50%;
-    opacity: 0.28;
-    pointer-events: none;
-    animation: heroImageDrift 20s ease-in-out infinite alternate;
+    object-position: center 30%;
+    opacity: 0.4;
+    animation: heroImageDrift 22s ease-in-out infinite alternate;
     transition: opacity 0.4s ease;
 }
 
 .light-theme .hero-image {
-    opacity: 0.15;
+    opacity: 0.22;
 }
 
 .hero-shade {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(90deg, rgba(3, 7, 18, 0.96) 0%, rgba(3, 7, 18, 0.8) 50%, rgba(3, 7, 18, 0.3) 100%), 
-                linear-gradient(0deg, rgba(3, 7, 18, 0.6) 0%, rgba(3, 7, 18, 0.2) 100%);
+    background: linear-gradient(90deg, rgba(3, 7, 18, 0.98) 0%, rgba(3, 7, 18, 0.85) 45%, rgba(3, 7, 18, 0.2) 80%), 
+                linear-gradient(0deg, rgba(3, 7, 18, 0.6) 0%, rgba(3, 7, 18, 0.1) 100%);
     pointer-events: none;
     transition: background 0.4s ease;
 }
 
 .light-theme .hero-shade {
-    background: linear-gradient(90deg, rgba(243, 244, 246, 0.97) 0%, rgba(243, 244, 246, 0.85) 50%, rgba(243, 244, 246, 0.35) 100%), 
-                linear-gradient(0deg, rgba(243, 244, 246, 0.6) 0%, rgba(243, 244, 246, 0.2) 100%);
+    background: linear-gradient(90deg, rgba(243, 244, 246, 0.98) 0%, rgba(243, 244, 246, 0.9) 45%, rgba(243, 244, 246, 0.25) 80%), 
+                linear-gradient(0deg, rgba(243, 244, 246, 0.6) 0%, rgba(243, 244, 246, 0.1) 100%);
 }
 
 @keyframes heroImageDrift {
     0% { transform: scale(1) translate(0, 0); }
-    100% { transform: scale(1.06) translate(8px, -4px); }
+    100% { transform: scale(1.08) translate(12px, -6px); }
 }
 
 .visual-card-wrapper {
